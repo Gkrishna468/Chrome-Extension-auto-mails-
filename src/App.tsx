@@ -107,459 +107,224 @@ export default function App() {
   };
 
   return (
-    <div className="flex h-screen bg-[#FDFCFB] text-slate-900 font-sans">
-      {/* Sidebar - Config */}
-      <aside className="w-80 border-r border-slate-200 bg-white flex flex-col p-6 overflow-y-auto">
-        <div className="flex items-center gap-2 mb-8">
-          <div className="bg-slate-900 text-white p-2 rounded-lg">
+    <div className="flex flex-col h-screen bg-[#FDFCFB] text-slate-900 font-sans w-full max-w-[420px] mx-auto md:max-w-none shadow-xl border-x border-slate-200 md:border-none md:shadow-none bg-white">
+      {/* Header */}
+      <header className="border-b border-slate-200 bg-white px-5 py-4 flex items-center justify-between z-10 sticky top-0 shadow-sm shrink-0">
+        <div className="flex items-center gap-2">
+          <div className="bg-slate-900 text-white p-1.5 rounded-lg">
             <BrainCircuit className="w-5 h-5" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight">HireNestOS</h1>
+          <h1 className="text-lg font-bold tracking-tight">HireNestOS AI</h1>
         </div>
-
-        <div className="space-y-8">
-          <section>
-            <div className="flex items-center gap-2 text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">
-              <UserCog className="w-4 h-4" />
-              Response Persona
-            </div>
-            <div className="space-y-2">
-              {(["Auto", "Founder", "CEO", "BDM"] as Persona[]).map((p) => (
-                <button
-                  key={p}
-                  onClick={() => setPersona(p)}
-                  className={cn(
-                    "w-full text-left px-4 py-3 rounded-xl border transition-all flex items-center justify-between group",
-                    persona === p 
-                      ? "border-slate-900 bg-slate-50 ring-1 ring-slate-900" 
-                      : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
-                  )}
-                >
-                  <span className="font-medium">{p} Mode</span>
-                  <ChevronRight className={cn(
-                    "w-4 h-4 transition-transform",
-                    persona === p ? "text-slate-900" : "text-slate-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1"
-                  )} />
-                </button>
-              ))}
-            </div>
-            <p className="mt-3 text-xs text-slate-500 leading-relaxed px-1">
-              {persona === "Auto" && "AI automatically routes the email to the best persona based on intent and risk score."}
-              {persona === "Founder" && "Focuses on vision, partnerships, investors, and strategic conversations."}
-              {persona === "CEO" && "Focuses on leadership communication, updates, hiring, and escalations."}
-              {persona === "BDM" && "Focuses on lead nurturing, sales, partnerships, and negotiations."}
-            </p>
-          </section>
-
-          <section>
-            <div className="flex items-center gap-2 text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">
-              <BrainCircuit className="w-4 h-4 text-emerald-600" />
-              Memanto Memory Layer
-            </div>
-            <div className="space-y-3">
-              {knowledgeBase.map((item) => (
-                <div key={item.id} className="bg-slate-50 p-3 rounded-lg border border-slate-100 text-sm">
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="font-medium text-slate-700">{item.key}</div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-200 px-1.5 py-0.5 rounded">{item.type}</span>
-                  </div>
-                  <div className="text-slate-500 text-xs">{item.value}</div>
-                </div>
-              ))}
-              <button className="text-sm font-medium text-slate-600 hover:text-slate-900 flex items-center gap-1 mt-2">
-                <Settings2 className="w-4 h-4" /> Manage Memories
-              </button>
-            </div>
-          </section>
+        <div className="flex items-center gap-2">
+           <button className="p-1.5 text-slate-400 hover:bg-slate-100 rounded-md transition-colors"><Settings2 className="w-4 h-4" /></button>
         </div>
-      </aside>
+      </header>
 
-      {/* Main Workspace */}
-      <main className="flex-1 flex flex-col items-center p-8 overflow-y-auto">
-        <div className="w-full max-w-4xl space-y-8 mt-4">
-          
-          <header className="mb-10 text-center">
-            <h2 className="text-3xl font-semibold tracking-tight mb-3">Memanto-Powered Inbox Agent</h2>
-            <p className="text-slate-500">Paste an incoming email below. The AI will recall relevant memories and draft perfectly contextual replies.</p>
-          </header>
-
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-shadow focus-within:shadow-md focus-within:border-slate-300 focus-within:ring-1 focus-within:ring-slate-300">
-            <div className="bg-slate-50 border-b border-slate-200 px-4 py-3 flex items-center justify-between gap-2 text-sm font-medium text-slate-600">
-              <div className="flex items-center gap-2">
-                <Inbox className="w-4 h-4" /> Incoming Email
+      <div className="flex-1 overflow-y-auto px-4 py-5 flex flex-col gap-6">
+        
+        {/* Core Actions */}
+        <section className="flex flex-col gap-3">
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden transition-shadow focus-within:shadow-md focus-within:border-slate-300 focus-within:ring-1 focus-within:ring-slate-300">
+            <div className="bg-slate-50 border-b border-slate-200 px-3 py-2 flex items-center justify-between text-xs font-medium text-slate-600">
+              <div className="flex items-center gap-1.5">
+                <Inbox className="w-3.5 h-3.5" /> Email
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-400">From:</span>
-                <input 
+              <input 
                   type="email" 
                   value={senderEmail} 
                   onChange={(e) => setSenderEmail(e.target.value)} 
-                  placeholder="sender@domain.com (Optional)"
-                  className="bg-white text-slate-700 text-xs px-2 py-1 outline-none border border-slate-200 rounded-md w-64 focus:border-slate-400"
-                />
-              </div>
+                  placeholder="From: sender@domain.com"
+                  className="bg-transparent text-slate-700 text-xs px-1 py-0.5 outline-none placeholder:text-slate-400 w-36 text-right"
+              />
             </div>
             <textarea
               value={emailBody}
               onChange={(e) => setEmailBody(e.target.value)}
-              placeholder="e.g. We have 20 freelancers on our payroll bench available. Let me know if you need profiles."
-              className="w-full h-48 p-5 outline-none resize-none bg-transparent"
+              placeholder="Paste email content here..."
+              className="w-full h-32 p-3 outline-none resize-none bg-transparent text-sm leading-relaxed"
             />
           </div>
-
-          <div className="flex justify-end">
-            <button
+          
+          <div className="flex justify-between items-center gap-2">
+             <div className="flex-1 flex flex-col relative">
+                <select 
+                  value={persona}
+                  onChange={(e) => setPersona(e.target.value as Persona)}
+                  className="appearance-none w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium px-3 py-2.5 rounded-lg pr-8 focus:outline-none focus:ring-1 focus:ring-slate-300"
+                >
+                  <option value="Auto">Auto-Persona</option>
+                  <option value="Founder">Founder Mode</option>
+                  <option value="CEO">CEO Mode</option>
+                  <option value="BDM">BDM Mode</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                  <UserCog className="w-3.5 h-3.5" />
+                </div>
+             </div>
+             <button
               onClick={handleAnalyze}
               disabled={!emailBody.trim() || isAnalyzing}
-              className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-xl font-medium flex items-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
-            >
-              {isAnalyzing ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white/20 border-t-white" />
-                  Analyzing...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5" />
-                  Analyze & Draft
-                </>
-              )}
+              className="flex-shrink-0 bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 shadow-sm"
+             >
+              {isAnalyzing ? <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white" /> : <Sparkles className="w-4 h-4" />}
+              Analyze
             </button>
           </div>
+        </section>
 
-          {/* Results Area */}
-          <AnimatePresence>
-            {(analysis || draft || isAnalyzing) && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                className="space-y-6"
-              >
-                {/* Meta Panel */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                    <div className="flex items-center gap-2 text-slate-500 text-sm font-medium mb-3">
-                      <Tag className="w-4 h-4" /> Intent
-                    </div>
-                    {isAnalyzing ? (
-                      <div className="h-6 w-24 bg-slate-100 animate-pulse rounded" />
-                    ) : (
-                      <div className="flex flex-wrap gap-2">
-                        {analysis?.intent?.map(i => (
-                          <span key={i} className="px-2.5 py-1 bg-blue-50 text-blue-700 text-sm rounded-md font-medium">
-                            {i}
-                          </span>
-                        ))}
-                      </div>
+        {/* Results Area */}
+        <AnimatePresence>
+          {(analysis || draft || isAnalyzing) && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              className="space-y-4"
+            >
+              
+              {/* Meta Panel (Compact Grid) */}
+              <div className="grid grid-cols-2 gap-2">
+                 <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
+                    <div className="text-[10px] uppercase font-bold text-slate-400 mb-1 flex items-center gap-1"><Tag className="w-3 h-3"/> Intent</div>
+                    {isAnalyzing ? <div className="h-4 w-16 bg-slate-200 animate-pulse rounded" /> : (
+                       <div className="text-xs font-medium text-blue-700 truncate">{analysis?.intent?.[0] || "-"}</div>
                     )}
-                  </div>
-                  
-                  <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                    <div className="flex items-center gap-2 text-slate-500 text-sm font-medium mb-3">
-                      <Clock className="w-4 h-4" /> Urgency
-                    </div>
-                     {isAnalyzing ? (
-                      <div className="h-6 w-20 bg-slate-100 animate-pulse rounded" />
-                    ) : (
-                      <span className={cn(
-                        "font-semibold text-lg",
-                        analysis?.urgency === "High" ? "text-rose-600" :
-                        analysis?.urgency === "Medium" ? "text-amber-600" : "text-emerald-600"
-                      )}>
-                        {analysis?.urgency}
-                      </span>
+                 </div>
+                 <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
+                    <div className="text-[10px] uppercase font-bold text-slate-400 mb-1 flex items-center gap-1"><Target className="w-3 h-3"/> Action</div>
+                    {isAnalyzing ? <div className="h-4 w-20 bg-slate-200 animate-pulse rounded" /> : (
+                       <div className="text-xs font-medium text-slate-800 truncate" title={analysis?.suggestedAction}>{analysis?.suggestedAction || "-"}</div>
                     )}
-                  </div>
-                  
-                  <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                     <div className="flex items-center gap-2 text-slate-500 text-sm font-medium mb-3">
-                      <Target className="w-4 h-4" /> Action
-                    </div>
-                    {isAnalyzing ? (
-                      <div className="h-6 w-24 bg-slate-100 animate-pulse rounded" />
-                    ) : (
-                      <div className="font-medium text-slate-900 line-clamp-1" title={analysis?.suggestedAction}>
-                        {analysis?.suggestedAction}
-                      </div>
+                 </div>
+                 <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
+                    <div className="text-[10px] uppercase font-bold text-slate-400 mb-1 flex items-center gap-1"><ShieldAlert className="w-3 h-3"/> Risk</div>
+                    {isAnalyzing ? <div className="h-4 w-12 bg-slate-200 animate-pulse rounded" /> : (
+                       <div className={cn("text-xs font-bold", (analysis?.riskScore || 0) < 40 ? "text-emerald-600" : (analysis?.riskScore || 0) < 70 ? "text-amber-600" : "text-rose-600")}>
+                          {analysis?.riskScore || 0} / 100
+                       </div>
                     )}
-                  </div>
+                 </div>
+                 <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
+                    <div className="text-[10px] uppercase font-bold text-slate-400 mb-1 flex items-center gap-1"><UserCog className="w-3 h-3"/> Persona</div>
+                    {isAnalyzing ? <div className="h-4 w-16 bg-slate-200 animate-pulse rounded" /> : (
+                       <div className="text-xs font-medium text-indigo-700">{appliedPersona || persona}</div>
+                    )}
+                 </div>
+              </div>
 
-                  <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                     <div className="flex items-center gap-2 text-slate-500 text-sm font-medium mb-3 whitespace-nowrap">
-                      <ShieldAlert className="w-4 h-4" /> Risk Score
-                    </div>
-                    {isAnalyzing ? (
-                      <div className="h-6 w-16 bg-slate-100 animate-pulse rounded" />
-                    ) : (
-                      <div className="font-medium text-slate-900 flex items-center gap-2">
-                        <span className={cn(
-                          "w-2 h-2 rounded-full",
-                          (analysis?.riskScore || 0) < 40 ? "bg-emerald-500" : (analysis?.riskScore || 0) < 70 ? "bg-amber-500" : "bg-rose-500"
-                        )} />
-                        {analysis?.riskScore} / 100
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Persona Router Agent Action */}
-                {!isAnalyzing && analysis?.personaDecision && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500" />
-                    <div className="flex items-center gap-2 text-indigo-800 text-sm font-medium">
-                      <BrainCircuit className="w-4 h-4" /> Persona Router Agent
-                    </div>
-                    <div className="text-sm text-indigo-900 leading-relaxed font-medium">
-                      <span className="font-bold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded mr-2">Routed to: {analysis.personaDecision.persona}</span>
-                      {analysis.personaDecision.reason}
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* Retrieved Context Pipeline */}
-                {!isAnalyzing && retrievedMemories.length > 0 && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
-                     <div className="flex items-center gap-2 text-emerald-800 text-sm font-medium">
-                        <CheckCircle2 className="w-4 h-4" /> {retrievedMemories.length} Memories Retrieved
-                     </div>
-                     <div className="flex flex-wrap gap-2">
-                       {retrievedMemories.map((m) => (
-                          <span key={m.id} className="text-xs font-mono font-medium px-2 py-1 bg-white text-emerald-700 border border-emerald-200 rounded shadow-sm">
-                            {m.type}:{m.key}
-                          </span>
-                       ))}
-                     </div>
-                  </motion.div>
-                )}
-
-                {/* Grounding Validation Engine */}
-                {!isAnalyzing && grounding && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={cn("border rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden", grounding.passed ? "bg-blue-50 border-blue-100" : "bg-rose-50 border-rose-100")}>
-                    <div className={cn("absolute top-0 left-0 w-1 h-full", grounding.passed ? "bg-blue-500" : "bg-rose-500")} />
-                    <div className={cn("flex items-center justify-between text-sm font-medium", grounding.passed ? "text-blue-800" : "text-rose-800")}>
-                      <div className="flex items-center gap-2">
-                        <Activity className="w-4 h-4" /> 
-                        Draft Validation Agent
-                      </div>
-                      {grounding.passed ? (
-                        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs">
-                           <CheckCircle2 className="w-3 h-3" /> Passed
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-xs">
-                           <AlertCircle className="w-3 h-3" /> Hallucination Detected
-                        </span>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 mt-1">
-                      <div>
-                         <div className={cn("text-xs mb-1", grounding.passed ? "text-blue-600/70" : "text-rose-600/70")}>Grounding Score</div>
-                         <div className={cn("font-mono text-lg", grounding.passed ? "text-blue-700" : "text-rose-700")}>
-                           {(grounding.groundingScore * 100).toFixed(0)}%
-                         </div>
-                      </div>
-                      <div>
-                         <div className={cn("text-xs mb-1", grounding.passed ? "text-blue-600/70" : "text-rose-600/70")}>Hallucination Score</div>
-                         <div className={cn("font-mono text-lg", grounding.passed ? "text-blue-700" : "text-rose-700")}>
-                           {(grounding.hallucinationScore * 100).toFixed(0)}%
-                         </div>
-                      </div>
-                    </div>
-                    {!grounding.passed && grounding.missingEntities.length > 0 && (
-                      <div className="mt-2 text-xs text-rose-700">
-                        <span className="font-semibold">Missing Entities:</span> {grounding.missingEntities.join(", ")}
-                      </div>
-                    )}
-                  </motion.div>
-                )}
-
-                {/* Business Quality Validation Engine */}
-                {!isAnalyzing && businessQuality && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={cn("border rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden", businessQuality.passed ? "bg-purple-50 border-purple-100" : "bg-orange-50 border-orange-100")}>
-                    <div className={cn("absolute top-0 left-0 w-1 h-full", businessQuality.passed ? "bg-purple-500" : "bg-orange-500")} />
-                    <div className={cn("flex items-center justify-between text-sm font-medium", businessQuality.passed ? "text-purple-800" : "text-orange-800")}>
-                      <div className="flex items-center gap-2">
-                        <Settings2 className="w-4 h-4" /> 
-                        Business Quality Validator
-                      </div>
-                      {businessQuality.passed ? (
-                        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs">
-                           <CheckCircle2 className="w-3 h-3" /> Ready to Send
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 text-xs">
-                           <AlertCircle className="w-3 h-3" /> Needs Revision
-                        </span>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-3 gap-4 mt-1">
-                      <div>
-                         <div className={cn("text-xs mb-1", businessQuality.passed ? "text-purple-600/70" : "text-orange-600/70")}>Completeness</div>
-                         <div className={cn("font-mono text-lg", businessQuality.passed ? "text-purple-700" : "text-orange-700")}>
-                           {(businessQuality.completenessScore * 100).toFixed(0)}%
-                         </div>
-                      </div>
-                      <div>
-                         <div className={cn("text-xs mb-1", businessQuality.passed ? "text-purple-600/70" : "text-orange-600/70")}>Professionalism</div>
-                         <div className={cn("font-mono text-lg", businessQuality.passed ? "text-purple-700" : "text-orange-700")}>
-                           {(businessQuality.professionalismScore * 100).toFixed(0)}%
-                         </div>
-                      </div>
-                      <div>
-                         <div className={cn("text-xs mb-1", businessQuality.passed ? "text-purple-600/70" : "text-orange-600/70")}>Relevance</div>
-                         <div className={cn("font-mono text-lg", businessQuality.passed ? "text-purple-700" : "text-orange-700")}>
-                           {(businessQuality.staffingRelevanceScore * 100).toFixed(0)}%
-                         </div>
-                      </div>
-                    </div>
-                    {businessQuality.locationValidation && !businessQuality.locationValidation.passed && (
-                      <div className="mt-2 text-xs text-orange-700 bg-orange-100/50 p-2 rounded border border-orange-200">
-                        <span className="font-semibold block mb-1">⚠️ Location Constraint Failed</span>
-                        Required: <span className="font-mono">{businessQuality.locationValidation.requiredLocation}</span> | 
-                        Found: <span className="font-mono">{businessQuality.locationValidation.candidateLocation}</span>
-                      </div>
-                    )}
-                    {!businessQuality.passed && businessQuality.missingSections.length > 0 && (
-                      <div className="mt-2 text-xs text-orange-700">
-                        <span className="font-semibold">Missing/Weak Sections:</span> {businessQuality.missingSections.join(", ")}
-                      </div>
-                    )}
-                  </motion.div>
-                )}
-
-                {/* Confidence Engine & AI Gateway Action */}
+               {/* Confidence Engine & System */}
                 {!isAnalyzing && confidenceEngine && (
-                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={cn("border rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden", confidenceEngine.canOneClickSend ? "bg-emerald-50 border-emerald-100" : "bg-amber-50 border-amber-100")}>
-                    <div className={cn("absolute top-0 left-0 w-1 h-full", confidenceEngine.canOneClickSend ? "bg-emerald-500" : "bg-amber-500")} />
-                    <div className={cn("flex items-center justify-between text-sm font-medium", confidenceEngine.canOneClickSend ? "text-emerald-800" : "text-amber-800")}>
-                      <div className="flex items-center gap-2">
-                        <Activity className="w-4 h-4" /> 
-                        Trust & Approval Engine
+                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={cn("border rounded-xl p-3 flex flex-col gap-2 relative overflow-hidden", confidenceEngine.canOneClickSend ? "bg-emerald-50/50 border-emerald-100" : "bg-amber-50/50 border-amber-100")}>
+                      <div className={cn("absolute top-0 left-0 w-1 h-full", confidenceEngine.canOneClickSend ? "bg-emerald-500" : "bg-amber-500")} />
+                      
+                      <div className="flex items-center justify-between">
+                         <div className={cn("text-xs font-bold flex items-center gap-1.5", confidenceEngine.canOneClickSend ? "text-emerald-700" : "text-amber-700")}>
+                            {confidenceEngine.canOneClickSend ? <CheckCircle2 className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
+                            Trust Engine Score
+                         </div>
+                         <div className={cn("text-sm font-mono font-bold", confidenceEngine.canOneClickSend ? "text-emerald-700" : "text-amber-700")}>
+                            {confidenceEngine.trustScore.toFixed(0)}%
+                         </div>
                       </div>
-                      <span className={cn("flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs", confidenceEngine.canOneClickSend ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700")}>
-                        {confidenceEngine.canOneClickSend ? <><CheckCircle2 className="w-3 h-3" /> Auto-Send Eligible</> : <><AlertCircle className="w-3 h-3" /> Requires Manual Review</>}
-                      </span>
-                    </div>
 
-                    <div className="grid grid-cols-5 gap-3 mt-1">
-                      <div>
-                         <div className={cn("text-xs mb-1", confidenceEngine.canOneClickSend ? "text-emerald-600/70" : "text-amber-600/70")}>Deterministic</div>
-                         <div className={cn("font-mono font-medium", confidenceEngine.canOneClickSend ? "text-emerald-700" : "text-amber-700")}>
-                           {confidenceEngine.deterministicScore.toFixed(0)}%
-                         </div>
-                      </div>
-                      <div>
-                         <div className={cn("text-xs mb-1", confidenceEngine.canOneClickSend ? "text-emerald-600/70" : "text-amber-600/70")}>Memory</div>
-                         <div className={cn("font-mono font-medium", confidenceEngine.canOneClickSend ? "text-emerald-700" : "text-amber-700")}>
-                           {confidenceEngine.memoryScore.toFixed(0)}%
-                         </div>
-                      </div>
-                      <div>
-                         <div className={cn("text-xs mb-1", confidenceEngine.canOneClickSend ? "text-emerald-600/70" : "text-amber-600/70")}>Grounding</div>
-                         <div className={cn("font-mono font-medium", confidenceEngine.canOneClickSend ? "text-emerald-700" : "text-amber-700")}>
-                           {confidenceEngine.groundingScore.toFixed(0)}%
-                         </div>
-                      </div>
-                      <div>
-                         <div className={cn("text-xs mb-1", confidenceEngine.canOneClickSend ? "text-emerald-600/70" : "text-amber-600/70")}>Entity Val.</div>
-                         <div className={cn("font-mono font-medium", confidenceEngine.canOneClickSend ? "text-emerald-700" : "text-amber-700")}>
-                           {confidenceEngine.entityScore.toFixed(0)}%
-                         </div>
-                      </div>
-                      <div>
-                         <div className={cn("text-xs mb-1 font-bold", confidenceEngine.canOneClickSend ? "text-emerald-700" : "text-amber-700")}>Trust Score</div>
-                         <div className={cn("font-mono text-xl", confidenceEngine.canOneClickSend ? "text-emerald-700" : "text-amber-700")}>
-                           {confidenceEngine.trustScore.toFixed(0)}%
-                         </div>
-                      </div>
-                    </div>
+                      {grounding && !grounding.entityValidationPassed && !confidenceEngine.entityResolution?.isAutoCorrected && (
+                        <div className="bg-red-50/80 border border-red-200 text-red-700 rounded p-2 text-xs">
+                           <strong>Warning:</strong> Missing or mismatched company entity! Needs review.
+                        </div>
+                      )}
 
-                    {grounding && !grounding.entityValidationPassed && !confidenceEngine.entityResolution?.isAutoCorrected && (
-                      <div className="mt-2 bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 text-sm flex flex-col gap-1">
-                        <div className="font-semibold flex items-center gap-1.5"><AlertCircle className="w-4 h-4"/> Entity Validation Failed</div>
-                        <div className="text-xs">
-                           <strong>Detected Company:</strong> {grounding.extractedCompany || "Unknown"} <br/>
-                           <strong>Generated Company:</strong> {grounding.generatedCompany || "Unknown"}
+                      {confidenceEngine.entityResolution?.isAutoCorrected && (
+                        <div className="bg-emerald-50/80 border border-emerald-200 text-emerald-800 rounded p-2 text-[10px] flex gap-1">
+                           <CheckCircle2 className="w-3 h-3 shrink-0 mt-0.5"/>
+                           <div>
+                              <strong>Auto-corrected Entity:</strong><br/>
+                              <span className="font-mono">{confidenceEngine.entityResolution.originalGenerated} &rarr; {confidenceEngine.entityResolution.canonicalName}</span>
+                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                      
+                      {!confidenceEngine.canOneClickSend && businessQuality && !businessQuality.passed && (
+                         <div className="bg-orange-50/80 border border-orange-200 text-orange-800 rounded p-2 text-[10px] mt-1 space-y-1">
+                            <span className="font-semibold block">Quality Check Failed</span>
+                            <div>Completeness: {(businessQuality.completenessScore*100).toFixed(0)}%</div>
+                            <div>Relevance: {(businessQuality.staffingRelevanceScore*100).toFixed(0)}%</div>
+                         </div>
+                      )}
 
-                    {confidenceEngine.entityResolution?.isAutoCorrected && (
-                      <div className="mt-2 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg p-3 text-sm flex flex-col gap-1">
-                        <div className="font-semibold flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4"/> Company auto-corrected:</div>
-                        <div className="text-xs font-mono">
-                           {confidenceEngine.entityResolution.originalGenerated} &rarr; {confidenceEngine.entityResolution.canonicalName}
-                        </div>
-                        <div className="text-xs mt-1">
-                           Source: Email {confidenceEngine.entityResolution.source} ({confidenceEngine.entityResolution.confidence}% confidence)
-                        </div>
-                      </div>
-                    )}
-                    
-                    <div className={cn("mt-2 pt-3 border-t flex flex-col gap-2", confidenceEngine.canOneClickSend ? "border-emerald-200/60" : "border-amber-200/60")}>
-                      <div className="flex items-center justify-between text-xs font-mono">
-                         <span className="font-semibold text-slate-500">System Action:</span>
-                         <span className="text-slate-700 bg-white px-2 py-0.5 rounded border">
-                           {confidenceEngine.action.map((act, i) => <span key={i} className="bg-slate-100 rounded px-1 py-0.5 mx-0.5 border border-slate-200">{act}</span>)}
-                         </span>
-                      </div>
-                    </div>
                    </motion.div>
                 )}
 
-                {/* Draft Output */}
-                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                   <div className="bg-slate-50 border-b border-slate-200 px-5 py-4 flex items-center justify-between">
-                     <div className="flex items-center gap-2 font-medium text-slate-900">
-                        <Sparkles className="w-4 h-4 text-emerald-600" />
-                        AI Draft Response
-                     </div>
-                     <span className="text-xs font-medium px-2 py-1 bg-slate-200 text-slate-600 rounded">
-                        {appliedPersona || persona} Mode
-                     </span>
+              {/* Draft Output */}
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+                 <div className="bg-slate-50 border-b border-slate-200 px-3 py-2.5 flex items-center justify-between">
+                   <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
+                      <Sparkles className="w-4 h-4 text-emerald-600" />
+                      AI Draft
                    </div>
-                   <div className="p-6">
-                     {isAnalyzing ? (
-                        <div className="space-y-3">
-                          <div className="h-4 bg-slate-100 animate-pulse rounded w-3/4" />
-                          <div className="h-4 bg-slate-100 animate-pulse rounded w-full" />
-                          <div className="h-4 bg-slate-100 animate-pulse rounded w-5/6" />
-                          <div className="h-4 bg-slate-100 animate-pulse rounded w-1/2" />
-                        </div>
-                     ) : (
-                       <div className="bg-white border border-slate-200 rounded-lg p-4 min-h-[12rem] whitespace-pre-wrap font-sans text-slate-800" dangerouslySetInnerHTML={{ __html: draft }} />
-                     )}
-                   </div>
-                   {!isAnalyzing && draft && confidenceEngine && (
-                     <div className="bg-slate-50 border-t border-slate-200 px-5 py-4 flex justify-between items-center">
-                        <div className="flex flex-col">
-                           <p className="text-sm text-slate-500 flex items-center gap-1"><Settings2 className="w-4 h-4"/> Tone learned from 120 past emails</p>
-                           {!confidenceEngine.canOneClickSend && (
-                              <p className="text-xs text-amber-600 flex items-center gap-1 mt-1">
-                                <AlertCircle className="w-3 h-3"/> 
-                                {grounding && !grounding.entityValidationPassed ? "Company name mismatch detected. Manual review required." : "Action requires manual review based on Trust Score or Risk Score."}
-                              </p>
-                           )}
-                        </div>
-                        <button 
-                           disabled={!confidenceEngine.canOneClickSend || isSending || sendSuccess}
-                           onClick={handleSend}
-                           className={cn("px-5 py-2 rounded-lg font-medium flex items-center gap-2 transition-all", confidenceEngine.canOneClickSend && !isSending && !sendSuccess ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-slate-200 text-slate-400 cursor-not-allowed")}
-                        >
-                          {isSending ? "Sending..." : sendSuccess ? "Sent!" : "One-Click Send"} <ArrowRight className="w-4 h-4" />
-                        </button>
-                     </div>
+                 </div>
+                 <div className="p-3">
+                   {isAnalyzing ? (
+                      <div className="space-y-2">
+                        <div className="h-3 bg-slate-100 animate-pulse rounded w-3/4" />
+                        <div className="h-3 bg-slate-100 animate-pulse rounded w-full" />
+                        <div className="h-3 bg-slate-100 animate-pulse rounded w-5/6" />
+                        <div className="h-3 bg-slate-100 animate-pulse rounded w-1/2" />
+                      </div>
+                   ) : (
+                     <div className="bg-white rounded text-xs min-h-[10rem] whitespace-pre-wrap font-sans text-slate-700 leading-relaxed max-h-64 overflow-y-auto pr-1" dangerouslySetInnerHTML={{ __html: draft }} />
                    )}
-                </div>
+                 </div>
+                 
+                 {!isAnalyzing && draft && confidenceEngine && (
+                   <div className="bg-slate-50 border-t border-slate-200 px-3 py-2 flex flex-col gap-2">
+                      <div className="grid grid-cols-2 gap-2">
+                          <button 
+                              onClick={() => alert("This would insert the draft into the Gmail compose window!")}
+                              className="text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-100 px-3 py-2 rounded-lg flex items-center justify-center gap-1 shadow-sm transition-colors"
+                           >
+                            Insert into Reply
+                         </button>
+                         <button 
+                             disabled={!confidenceEngine.canOneClickSend || isSending || sendSuccess}
+                             onClick={handleSend}
+                             className={cn("text-xs font-semibold px-3 py-2 rounded-lg flex items-center justify-center gap-1 shadow-sm transition-all", confidenceEngine.canOneClickSend && !isSending && !sendSuccess ? "bg-slate-900 hover:bg-slate-800 text-white" : "bg-slate-200 text-slate-400 cursor-not-allowed")}
+                          >
+                            {isSending ? "Sending..." : sendSuccess ? "Sent!" : "One-Click Send"} <Send className="w-3 h-3" />
+                         </button>
+                      </div>
+                   </div>
+                 )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-              </motion.div>
-            )}
-          </AnimatePresence>
+        {/* Memento Memory Compact View */}
+        <section className="mt-2 pb-4">
+            <details className="group [&_summary::-webkit-details-marker]:hidden">
+               <summary className="flex items-center justify-between p-3 bg-slate-50 rounded-lg cursor-pointer border border-slate-200">
+                  <span className="text-xs font-semibold text-slate-600 flex items-center gap-2">
+                     <Database className="w-3.5 h-3.5" />
+                     Memanto Memory Layer
+                  </span>
+                  <ChevronRight className="w-4 h-4 text-slate-400 transition group-open:rotate-90" />
+               </summary>
+               <div className="mt-2 space-y-2 max-h-48 overflow-y-auto px-1">
+                   {knowledgeBase.map((item) => (
+                      <div key={item.id} className="bg-white p-2 rounded border border-slate-100 text-[10px] shadow-sm">
+                        <div className="flex items-center justify-between mb-1">
+                           <div className="font-semibold text-slate-700 truncate">{item.key}</div>
+                           <span className="font-bold uppercase tracking-wider text-slate-400 bg-slate-100 px-1 rounded">{item.type}</span>
+                        </div>
+                        <div className="text-slate-500 truncate">{item.value}</div>
+                      </div>
+                    ))}
+               </div>
+            </details>
+        </section>
 
-        </div>
-      </main>
+      </div>
     </div>
   );
 }
