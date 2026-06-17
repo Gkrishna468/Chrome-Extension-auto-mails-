@@ -34,7 +34,7 @@ export default function App() {
   const [businessQuality, setBusinessQuality] = useState<BusinessQualityResult | null>(null);
   const [confidenceEngine, setConfidenceEngine] = useState<ConfidenceEngineResult | null>(null);
 
-  const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://foundermail-ai-781770438698.asia-southeast1.run.app";
 
   const handleAnalyze = async () => {
     if (!emailBody.trim()) return;
