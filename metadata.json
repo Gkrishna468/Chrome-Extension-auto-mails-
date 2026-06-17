@@ -1,0 +1,6 @@
+{
+  "name": "HireNestOS",
+  "description": "An autonomous executive inbox agent with a Memanto memory layer built for HireNest.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "HireNestOS MailOS",
+  "version": "1.0",
+  "description": "AI-powered staffing relationship platform for Gmail.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://mail.google.com/*"
+  ],
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open HireNestOS"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  }
+}
