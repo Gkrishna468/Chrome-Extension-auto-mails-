@@ -34,7 +34,7 @@ export default function App() {
   const [businessQuality, setBusinessQuality] = useState<BusinessQualityResult | null>(null);
   const [confidenceEngine, setConfidenceEngine] = useState<ConfidenceEngineResult | null>(null);
 
-  const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://foundermail-ai-781770438698.asia-southeast1.run.app";
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://ais-dev-oy2em3rartdjgcemjc5sz7-375081910602.asia-east1.run.app";
 
   const handleAnalyze = async () => {
     if (!emailBody.trim()) return;
@@ -55,6 +55,10 @@ export default function App() {
         body: JSON.stringify({ emailBody, senderEmail, persona, knowledgeBase })
       });
       
+      if (!response.ok) {
+         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const data: ApiResponse = await response.json();
       if (data.error) throw new Error(data.error);
       
@@ -65,9 +69,9 @@ export default function App() {
       setGrounding(data.grounding || null);
       setBusinessQuality(data.businessQuality || null);
       setConfidenceEngine(data.confidenceEngine || null);
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      setDraft("Failed to generate draft. Please try again.");
+      setDraft(`Failed to generate draft. Error: ${e.message || 'Unknown error'}`);
     } finally {
       setIsAnalyzing(false);
     }
