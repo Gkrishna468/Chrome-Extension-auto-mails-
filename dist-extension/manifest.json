@@ -13,7 +13,7 @@
   ],
   "action": {
     "default_popup": "index.html",
-    "default_title": "Open HireNestOS"
+    "default_title": " Open HireNestOS"
   },
   "content_scripts": [
     {
